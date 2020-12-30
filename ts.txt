@@ -1,0 +1,26 @@
+import * as Excel from 'exceljs';
+
+  file;
+
+
+  async log(e, change?) {
+    if (e && e.target.files && e.target.files[0]) {
+      this.file = e.target.files[0];
+      const wb = new Excel.Workbook();
+      const reader = new FileReader();
+      reader.readAsArrayBuffer(this.file);
+      reader.onload = (e: any) => {
+        const buffer = e.target.result;
+        wb.xlsx.load(buffer).then(workbook => {
+          console.log(workbook, 'workbook instance');
+          workbook.eachSheet((sheet, id) => {
+            sheet.eachRow((row, rowIndex) => {
+              console.log(row.values, rowIndex);
+            });
+          });
+        });
+      };
+    }
+
+    // await workbook.xlsx.readFile(fileInput);
+  }
